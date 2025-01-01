@@ -153,7 +153,7 @@ function calculateDelayFromTime(timeString) {
  * @param {string} uid - User ID
  */
 function scheduleStarters(uid) {
-    const randomMessagesPerDay = Math.floor(Math.random() * 5) + 1;
+    const randomMessagesPerDay = 6;
     
     for (let i = 0; i < randomMessagesPerDay; i++) {
         const hour = Math.floor(Math.random() * 
@@ -251,6 +251,7 @@ discordClient.on(Events.MessageCreate, async (message) => {
 
             // Send response
             await sendMessage(response, message.author.id, message.content);
+            await message.channel.sendTyping(false);
         }
     } catch (error) {
         console.error('Error processing message:', error);
