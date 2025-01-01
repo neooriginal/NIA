@@ -4,7 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const personalityEngine = require('./personalityEngine');
 const cron = require('node-cron');
-const {Client, GatewayIntentBits, Partials, Events} = require("discord.js");
+const {Client, GatewayIntentBits, Partials, Events, ActivityType} = require("discord.js");
 const config = require('./config');
 
 // Load environment variables
@@ -154,7 +154,7 @@ function calculateDelayFromTime(timeString) {
  */
 function scheduleStarters(uid) {
     const randomMessagesPerDay = 6;
-    
+
     for (let i = 0; i < randomMessagesPerDay; i++) {
         const hour = Math.floor(Math.random() * 
             (config.scheduling.activeHoursEnd - config.scheduling.activeHoursStart)) + 
@@ -216,6 +216,9 @@ async function sendMessage(response, uid, userMessage) {
 discordClient.on(Events.Ready, async () => {
     console.log('Discord client is ready');
     scheduleStarters(userID);
+
+    //status
+    discordClient.user.setActivity('Status: Online', { type: ActivityType.Listening });
 });
 
 discordClient.on(Events.MessageCreate, async (message) => {
