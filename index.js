@@ -115,7 +115,12 @@ async function askPersonalAI(message, uid, image) {
                 : calculateDelayFromTime(json.plannedTime);
 
             if (delay > 0) {
-                setTimeout(() => sendMessage(json.plannedMessage, uid), delay);
+                setTimeout(() => {
+                    let response = askPersonalAI("You are supposed to follow up on the previous message. Do not acknoledge that you are following up on the planned message. You may also decide not to respond if you have nothing usefull or new to say. Do not annoy the user.", uid);
+                    if (response.response) {
+                        sendMessage(response, uid);
+                    }
+                }, delay);
             }
         }
 
@@ -153,7 +158,7 @@ function calculateDelayFromTime(timeString) {
  * @param {string} uid - User ID
  */
 function scheduleStarters(uid) {
-    const randomMessagesPerDay = 6;
+    const randomMessagesPerDay = Math.floor(Math.random() * 4) + 1;
 
     for (let i = 0; i < randomMessagesPerDay; i++) {
         const hour = Math.floor(Math.random() * 
@@ -164,7 +169,7 @@ function scheduleStarters(uid) {
         cron.schedule(`${minute} ${hour} * * *`, async () => {
             console.log(`Scheduled message triggered at ${hour}:${minute}`);
             try {
-                const message = "YOU ARE INITIALIZING A NEW CONVERSATION. START WITH A STARTER FITTING TO THE PREVIOUS CONVERSATIONS. If nothing is good to say, do not respond.";
+                const message = "YOU ARE INITIALIZING A NEW CONVERSATION. START WITH A STARTER FITTING TO THE PREVIOUS CONVERSATIONS. If nothing is good to say, do not respond. Do not annoy the user";
                 const response = await askPersonalAI(message, uid);
                 if (response.response) {
                     await sendMessage(response, uid);

@@ -10,7 +10,7 @@ module.exports = {
 
     // Message Scheduling Configuration
     scheduling: {
-        timezone: 'UTC',        // Timezone for scheduled messages
+        timezone: 'UTC+10',        // Timezone for scheduled messages
         activeHoursStart: 8,    // Start hour for sending messages (24h format)
         activeHoursEnd: 22,     // End hour for sending messages (24h format)
         minTimeBetweenMessages: 3600000  // Minimum milliseconds between random messages
