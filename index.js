@@ -16,7 +16,8 @@ app.use(express.json());
 
 // Initialize OpenAI client
 const client = new openai.OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY
 });
 
 // Initialize Discord client with required intents

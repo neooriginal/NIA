@@ -34,7 +34,7 @@ cp .env.example .env
 
 The bot's behavior can be customized through the `config.js` file:
 
-- OpenAI parameters
+- OpenRouter.ai parameters
 - Scheduling preferences
 
 ## 🚀 Usage
