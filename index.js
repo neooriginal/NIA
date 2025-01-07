@@ -237,13 +237,17 @@ discordClient.on(Events.MessageCreate, async (message) => {
         const shouldProcess = message.channel.type === 1 || message.mentions.has(discordClient.user);
         
         if (shouldProcess && message.author.id === userID) {
-            await message.channel.sendTyping();
-            
             // Clean mention from message if present
             const cleanMessage = message.content.replace(`<@${discordClient.user.id}>`, '').trim();
             
+            // Start typing only during AI processing
+            const typingInterval = setInterval(() => message.channel.sendTyping(), 5000);
+            
             // Process message through AI
             const response = await askPersonalAI(cleanMessage, message.author.id, image);
+            
+            // Clear typing interval
+            clearInterval(typingInterval);
             
             if (!response.response) {
                 await message.react('👍');
@@ -260,15 +264,10 @@ discordClient.on(Events.MessageCreate, async (message) => {
 
             // Send response
             await sendMessage(response, message.author.id, message.content);
-            await message.channel.sendTyping(false);
         }
     } catch (error) {
         console.error('Error processing message:', error);
         await message.react('❌');
-    } finally {
-        if (message.channel.type === 1) {
-            await message.channel.sendTyping(false);
-        }
     }
 });
 
