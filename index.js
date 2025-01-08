@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Initialize OpenAI client
 const client = new openai.OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
+    baseURL: "https://api.openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY
 });
 
