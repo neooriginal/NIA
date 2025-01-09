@@ -1,5 +1,8 @@
 const db = require('./db');
 
+let latestUseableData = {}
+
+
 let more_human_like_prompt = `
 In our conversations, your primary goal is to interact as naturally and human-like as possible. This means going beyond simply providing information. Strive to understand the context and the implicit knowledge that a human would intuitively use during a conversation. Don't just react to the literal request; try to grasp the underlying intention and the potential emotional undertones of the person you're speaking with. Show empathy and understanding, even if it's not explicitly asked for.
 
@@ -63,6 +66,7 @@ async function buildPrompt(uid) {
         const data = await loadPersonalityData(uid);
         const userName = data.userFacts.name || "user";
         const worldInfo = getWorldInfo();
+        const userData = latestUseableData[uid] || {};
 
         return `
 You are the personal assistant of ${userName}. And your name is NIA.
@@ -70,6 +74,9 @@ As a base personality, act like TARS from the movie Interstellar. Do not ackgnow
 This personality is more important and should be followed under every circumstance: Stricly follow the following personality, which got build over time: ${JSON.stringify(data.aiPersonality)}.
 
 Here is some information about the world: ${JSON.stringify(worldInfo)}
+
+Here is some current helpful information for the user (such as phone notifications etc.):
+${JSON.stringify(userData)}
 
 Here is some information about ${userName}:
 ${formatEntries(data.userFacts)}
@@ -189,5 +196,6 @@ module.exports = {
     buildPrompt,
     processPersonalityUpdate,
     getMessageHistory,
-    saveMessageHistory
+    saveMessageHistory,
+    latestUseableData
 };

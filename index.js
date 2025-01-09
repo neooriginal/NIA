@@ -7,6 +7,7 @@ const cron = require('node-cron');
 const {Client, GatewayIntentBits, Partials, Events, ActivityType} = require("discord.js");
 const config = require('./config');
 
+
 // Load environment variables
 dotenv.config();
 
@@ -16,9 +17,10 @@ app.use(express.json());
 
 // Initialize OpenAI client
 const client = new openai.OpenAI({
-    baseURL: "https://api.openrouter.ai/api/v1",
+    baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY
 });
+
 
 // Initialize Discord client with required intents
 const discordClient = new Client({
@@ -62,6 +64,29 @@ function sanitizeMessage(msg) {
     return JSON.stringify(msg);
 }
 
+
+app.get("/notification", async (req, res) => {
+
+    let uid = req.query.uid || 'default';
+    let message = req.query.message;
+    let message2 = req.query.message2;
+
+   if(!personalityEngine.latestUseableData[uid]){
+         personalityEngine.latestUseableData[uid] = {}
+    }
+    personalityEngine.latestUseableData[uid].push({message: message, message2: message2})
+    res.json({ message: "Notification added" });
+})
+
+app.get("/morning", async (req, res) => {   
+    let uid = req.query.uid || 'default';
+    let response = await askPersonalAI("SYSTEM: THE USER JUST WOKE UP, START WITH A GOOD MORNING MESSAGE & TELL HIM NEW THINGS SUCH AS NOTIFICAIONS OR NEWS OR REMINDERS", uid);
+    sendMessage(response, uid);
+    return res.json({ response });
+})
+
+
+
 /**
  * Process a message through the AI personality engine
  * @param {string} message - The message to process
@@ -93,6 +118,8 @@ async function askPersonalAI(message, uid, image) {
         if (image) {
             messages.push({ role: "user", content: image });
         }
+
+        
 
         const response = await client.chat.completions.create({
             model: config.openai.model,
@@ -301,4 +328,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
 

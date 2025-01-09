@@ -17,7 +17,7 @@
     "express": "^4.21.2",
     "express-handlebars": "^8.0.1",
     "node-cron": "^3.0.3",
-    "openai": "^4.77.0",
+    "openai": "^4.77.4",
     "postgres": "^3.4.5",
     "socket.io": "^4.8.1"
   }
