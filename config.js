@@ -4,7 +4,7 @@
 module.exports = {
     // OpenAI API Configuration
     openai: {
-        model: "anthropic/claude-3.5-sonnet:beta",        // The OpenAI model to use for responses
+        model: "openai/gpt-4o",        // The OpenAI model to use for responses
         temperature: 0.7,       // Controls randomness in responses (0 = deterministic, 1 = creative)
     },
 

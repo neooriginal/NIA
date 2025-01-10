@@ -197,5 +197,6 @@ module.exports = {
     processPersonalityUpdate,
     getMessageHistory,
     saveMessageHistory,
-    latestUseableData
+    latestUseableData,
+    db
 };
